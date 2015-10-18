@@ -154,9 +154,9 @@ class Rover
   }
 
   /**
-   * Turns the Rover left from its current orientation.
+   * Turns the Rover right from its current orientation.
    */
-  private function turnLeft()
+  private function turnRight()
   {
 
     $current = $this->getCurrentPosition();
@@ -173,9 +173,9 @@ class Rover
   }
 
   /**
-   * Turns the Rover right from its current orientation.
+   * Turns the Rover left from its current orientation.
    */
-  private function turnRight()
+  private function turnLeft()
   {
 
     $current = $this->getCurrentPosition();
@@ -221,6 +221,10 @@ class Rover
     }
 
     if ($current['x'] > $grid['x'] || $current['y'] > $grid['y']) {
+      throw new Exception('Rover out of bounds. Start again with a larger grid.');
+    }
+
+    if ($current['x'] < 0 || $current['y'] < 0) {
       throw new Exception('Rover out of bounds. Start again with a larger grid.');
     }
 

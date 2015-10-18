@@ -41,7 +41,13 @@ class App
   public function start()
   {
 
-    $input = $this->cli->input('Please enter position/command: ');
+    // Header.
+    $this->cli->addArt(__DIR__ . '/assets');
+    $this->cli->green()->draw('logo');
+    $this->cli->info('Initialise a grid, move some rovers, use Ctrl-C at any time to exit.')->br();
+
+    // Prompt the user for input.
+    $input = $this->cli->input('Please enter grid, position or move command: ');
     $input->defaultTo('You need to enter a command or a position.');
     
     while($command = $input->prompt()) {
@@ -49,11 +55,12 @@ class App
       try {
 
         $this->validate($command);
+
         $commands = $this->roverCommands;
         $grid = $this->grid;
 
         if ($this->initRover) {
-          
+
           $this->cli->blue('Rover starts from: ' . $commands['position'] . '.');
           $this->cli->blue('It will execute move command: ' . $commands['movement'] . '.');
 
@@ -69,6 +76,8 @@ class App
           
           $this->roverCommands = array();
           $this->initRover = false;
+
+          $this->cli->br();
 
         }
         
@@ -152,7 +161,7 @@ class App
     $size = strlen($command);
 
     if ($this->init == false) {
-      throw new Exception('Need to initialise the grid first');
+      throw new Exception('Initialise the grid first. Use 33 for a 3x3 grid, max 9x9.');
     }
 
     if (is_numeric($command[0])) {
