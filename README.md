@@ -11,14 +11,21 @@ You will need `composer` and `git` installed to your system.
 Checkout repository:
 
 ```
-git clone git@github.com:tassoskoutlas/MarsRover.git
+git clone https://github.com/tassoskoutlas/MarsRover.git
 ```
 
 Make sure all dependencies are installed:
 
 ```
 cd MarsRover
-composer install
+/path/to/composer self-update
+/path/to/composer install
+```
+
+Change to correct branch:
+
+```
+git checkout tassos_solution
 ```
 
 To start the server run:
