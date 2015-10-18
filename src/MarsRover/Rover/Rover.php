@@ -30,10 +30,12 @@ class Rover
   /**
    * Constructor for Rover class.
    */
-  public function __construct($commands)
+  public function __construct($commands, $grid)
   {
     $this->position = $commands['position'];
     $this->movement = $commands['movement'];
+    $this->grid['x'] = $grid['x'];
+    $this->grid['y'] = $grid['y'];
   }
 
   /**
@@ -44,7 +46,7 @@ class Rover
 
     $this->validate($this->position, 'position');
     $this->validate($this->movement, 'movement');
-
+    
     $this->at($this->position);
     $this->to($this->movement);
     $this->destination = implode($this->getCurrentPosition());
@@ -134,7 +136,7 @@ class Rover
    * Kappa is the position of the current orientation from the
    * orientations array. It can be used to compute the left and
    * right values when orientation change commants are issued.
-   *
+   *$climate->border();
    * @param array $current
    *   An array that contains current (x,y) and orientation values.
    *
@@ -196,6 +198,7 @@ class Rover
   {
 
     $current = $this->getCurrentPosition();
+    $grid = $this->grid;
 
     switch ($current['o']) {
 
@@ -215,6 +218,10 @@ class Rover
       $current['x'] = $current['x'] + 1;
       break;
 
+    }
+
+    if ($current['x'] > $grid['x'] || $current['y'] > $grid['y']) {
+      throw new Exception('Rover out of bounds. Start again with a larger grid.');
     }
 
     $position = implode($current);
@@ -261,10 +268,12 @@ class Rover
   private function validatePosition($command)
   {
 
-    $regex = '/[1-9]{2}[' . implode($this->orientations) . ']/';
+    $regex = '/[0-9]{2}[' . implode($this->orientations) . ']/';
 
     if (!preg_match($regex, $command)) {
       throw new Exception('Position information not correct. Enter again.');
+
+
     }
     
   }

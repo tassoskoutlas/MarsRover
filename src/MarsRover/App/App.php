@@ -23,6 +23,7 @@ class App
 {
 
   private $cli;
+  private $grid = array();
   private $init = false;
   private $initRover = false;
   private $roverCommands = array();
@@ -49,13 +50,14 @@ class App
 
         $this->validate($command);
         $commands = $this->roverCommands;
+        $grid = $this->grid;
 
         if ($this->initRover) {
           
           $this->cli->blue('Rover starts from: ' . $commands['position'] . '.');
           $this->cli->blue('It will execute move command: ' . $commands['movement'] . '.');
 
-          $rover = new Rover($commands);
+          $rover = new Rover($commands, $grid);
           $rover->execute();
 
           $this->cli->green('Rover moved to: ' . $rover->destination);
@@ -70,7 +72,6 @@ class App
 
         }
         
-               
       } catch(Exception $e) {
 
         $this->cli->red($e->getMessage());
@@ -86,30 +87,18 @@ class App
    *
    * @param string $command
    *   The input command from the user.
-   *
-   * @return void
-   *
-   * @throws Exception
-   *   Throws an exception if command is less than 2 characters.
    */
   private function validate($command)
   {
 
     $size = strlen($command);
 
-    if ($size == 2) {
+    if ($size == 2 && is_numeric($command)) {
       $this->validateGridCommand($command);
-      return;
-    }
-
-    if ($size >= 3) {
+    } else {
       $this->validateRoverCommand($command);
-      return;
     }
 
-    throw new Exception('Command is not correct.');
-    return;
-    
   }
 
   /**
@@ -166,12 +155,16 @@ class App
       throw new Exception('Need to initialise the grid first');
     }
 
-    if ($size == 3) {
+    if (is_numeric($command[0])) {
+      
       $this->roverCommands['position'] = $command;
       $this->cli->green('Rover position set.');
+      
     } else {
+      
       $this->roverCommands['movement'] = $command;
       $this->cli->green('Rover movement set.');
+      
     }
 
     if (count($this->roverCommands) == 2) {
@@ -190,6 +183,8 @@ class App
   {
 
     $split = str_split($command);
+    $this->grid['x'] = $split[0];
+    $this->grid['y'] = $split[1];
     $this->cli->green('Grid initalised at ' . $split[0] . 'x' . $split[1] . '.');
     
   }
