@@ -48,11 +48,17 @@ class App
       try {
 
         $this->validate($command);
+        $commands = $this->roverCommands;
 
         if ($this->initRover) {
-          $rover = new Rover($this->roverCommands);
+          
+          $this->cli->blue('Rover starts from: ' . $commands['position'] . '.');
+          $this->cli->blue('It will execute move command: ' . $commands['movement'] . '.');
+
+          $rover = new Rover($commands);
           $rover->execute();
-          //$this->cli->green($rover->destination);
+
+          $this->cli->green('Rover moved to: ' . $rover->destination);
 
           // Usually PHP garbage collection takes care of this but
           // needs to be unset in large loops. See more at
@@ -62,8 +68,6 @@ class App
           $this->roverCommands = array();
           $this->initRover = false;
 
-          $this->cli->green('Rover executed.');
-          
         }
         
                
