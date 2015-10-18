@@ -4,13 +4,14 @@ MarRover is a command line application.
 
 ## Prerequisites
 
-You will need `composer` installed to your system.
+You will need `composer` and `git` installed to your system.
 
 ## Usage
 
 Checkout repository:
 
 ```
+git clone git@github.com:tassoskoutlas/MarsRover.git
 ```
 
 Make sure all dependencies are installed:
